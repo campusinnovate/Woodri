@@ -1,0 +1,11 @@
+{
+  "name": "Woodri — Gifts from Nature",
+  "short_name": "Woodri",
+  "description": "Corporate gifts dan souvenir custom yang dibuat dengan makna.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f7f2",
+  "theme_color": "#223a2f",
+  "icons": [{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
