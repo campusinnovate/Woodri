@@ -1,20 +1,32 @@
 # Woodri — Gifts from Nature
 
-Situs statis multi-halaman untuk Woodri, dibuat dengan HTML, CSS, dan JavaScript vanilla.
+Situs Woodri multi halaman dengan HTML, CSS, dan JavaScript vanilla, dipublikasikan sebagai situs statis GitHub Pages. Data konten dan prospek memakai Supabase.
 
-## Jalankan lokal
+## Menyiapkan backend Supabase
 
-Buka `index.html` di browser, atau jalankan static server seperti `python3 -m http.server 8000` lalu kunjungi `http://localhost:8000`.
+1. Buka **SQL Editor** pada proyek `uhxcvecdkrcgdvbztuxi` dan jalankan `supabase/schema.sql` satu kali.
+2. Di **Authentication → Providers**, aktifkan Email. Buat akun staf di **Authentication → Users**.
+3. Jadikan akun tersebut admin dengan SQL (ganti alamat email):
 
-## Terbitkan dengan GitHub Pages
+   ```sql
+   insert into public.admin_users(user_id)
+   select id from auth.users where email = 'admin@woodri.id'
+   on conflict do nothing;
+   ```
 
-1. Push isi repository ke branch `main`.
-2. Di GitHub, buka **Settings → Pages**.
-3. Pada **Build and deployment**, pilih **Deploy from a branch**, branch `main`, folder `/ (root)`, lalu **Save**.
-4. Tunggu proses deployment selesai. URL akan ditampilkan di halaman Pages.
+4. Pastikan URL yang dipakai admin terdaftar pada Authentication → URL Configuration → Redirect URLs. Karena login email/kata sandi tidak memakai magic link, tidak perlu URL redirect tambahan.
+5. URL proyek dan publishable key browser sudah ditaruh di `supabase-config.js`. Publishable key memang ditujukan untuk browser; jangan pernah memasukkan `service_role` key ke repository. RLS pada schema membatasi perubahan konten dan akses prospek kepada admin yang terdaftar.
 
-Semua halaman berada di root repository agar dapat dilayani langsung oleh GitHub Pages. Custom domain dan DNS belum diatur.
+## Menjalankan lokal
 
-## Catatan prototipe
+Jalankan `python3 -m http.server 8000`, lalu buka `http://localhost:8000`. Pastikan schema sudah dijalankan agar halaman dapat membaca dan menulis data.
 
-Halaman Admin menyimpan katalog, banner, voucher, artikel, testimoni, logo, dan prospek di `localStorage` browser, sehingga data hanya tersedia pada browser yang sama. Untuk penggunaan produksi, sambungkan ke backend dan autentikasi. Detail katalog di situs saat ini perlu dikonfirmasi Woodri sebelum dianggap spesifikasi final.
+## Publikasi GitHub Pages
+
+Workflow `.github/workflows/pages.yml` membangun deployment dari branch `main` setiap ada push. Di repository GitHub, buka **Settings → Pages** dan pilih **GitHub Actions** sebagai source. Setelah itu halaman hasil deployment tersedia di `https://campusinnovate.github.io/Woodri/`.
+
+## Admin
+
+Buka `/admin.html`, lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel dapat melihat prospek, mengelola produk, testimoni, logo kolaborasi, artikel, banner, voucher, dan copy halaman. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
+
+Pastikan teks persetujuan pemrosesan data pelanggan, kebijakan privasi, materi blog, spesifikasi produk, dan promo sudah ditinjau Woodri sebelum operasional publik.

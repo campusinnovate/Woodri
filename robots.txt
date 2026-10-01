@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Sitemap: https://woodri.id/sitemap.xml
+Sitemap: https://campusinnovate.github.io/Woodri/sitemap.xml
