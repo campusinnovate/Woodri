@@ -30,3 +30,7 @@ Workflow `.github/workflows/pages.yml` membangun deployment dari branch `main` s
 Buka `/admin.html`, lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel dapat melihat prospek, mengelola produk, testimoni, logo kolaborasi, artikel, banner, voucher, dan copy halaman. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
 
 Pastikan teks persetujuan pemrosesan data pelanggan, kebijakan privasi, materi blog, spesifikasi produk, dan promo sudah ditinjau Woodri sebelum operasional publik.
+
+## Login Google SSO untuk admin
+
+Panel admin menyediakan tombol Google SSO lewat Supabase Auth, dengan login email/kata sandi sebagai cadangan. Untuk mengaktifkan SSO, aktifkan provider Google pada **Authentication → Sign In / Providers** di Supabase, masukkan OAuth Client ID/Secret dari Google Cloud, dan tambahkan URL callback Supabase yang ditampilkan pada pengaturan provider. Tambahkan juga URL admin Pages (`https://campusinnovate.github.io/Woodri/admin.html`) pada **Authentication → URL Configuration → Redirect URLs**. Pengguna Google tetap perlu ditambahkan ke tabel `admin_users` agar panel terbuka.
