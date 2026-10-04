@@ -232,6 +232,55 @@ insert into public.vouchers(code, discount, is_active)
 values ('WOODRI10', 10, true)
 on conflict (code) do nothing;
 
+-- Public read, admin-only upload/update/delete for directly uploaded media.
+insert into storage.buckets(id, name, public, file_size_limit, allowed_mime_types)
+values ('woodri-media', 'woodri-media', true, 10485760,
+  array['image/jpeg','image/png','image/webp','image/avif','image/gif','image/svg+xml'])
+on conflict (id) do update set public = true, file_size_limit = 10485760,
+  allowed_mime_types = excluded.allowed_mime_types;
+drop policy if exists "public reads Woodri media" on storage.objects;
+create policy "public reads Woodri media" on storage.objects
+  for select to anon, authenticated using (bucket_id = 'woodri-media');
+drop policy if exists "admins upload Woodri media" on storage.objects;
+create policy "admins upload Woodri media" on storage.objects
+  for insert to authenticated with check (bucket_id = 'woodri-media' and public.is_woodri_admin());
+drop policy if exists "admins update Woodri media" on storage.objects;
+create policy "admins update Woodri media" on storage.objects
+  for update to authenticated using (bucket_id = 'woodri-media' and public.is_woodri_admin())
+  with check (bucket_id = 'woodri-media' and public.is_woodri_admin());
+drop policy if exists "admins delete Woodri media" on storage.objects;
+create policy "admins delete Woodri media" on storage.objects
+  for delete to authenticated using (bucket_id = 'woodri-media' and public.is_woodri_admin());
+
+-- Admin-only account directory and grants. The privileged create-user flow is
+-- provided by the Edge Function, which keeps the service role key server-side.
+create or replace function public.list_woodri_admins()
+returns table (user_id uuid, email text, created_at timestamptz)
+language plpgsql stable security definer set search_path = '' as $$
+begin
+  if not public.is_woodri_admin() then raise exception 'Admin access required'; end if;
+  return query select au.user_id, u.email::text, au.created_at
+    from public.admin_users au join auth.users u on u.id = au.user_id
+    order by au.created_at asc;
+end;
+$$;
+create or replace function public.revoke_woodri_admin(target_user_id uuid)
+returns boolean language plpgsql security definer set search_path = '' as $$
+declare admin_count integer;
+begin
+  if not public.is_woodri_admin() then raise exception 'Admin access required'; end if;
+  if target_user_id = auth.uid() then raise exception 'You cannot remove your own access'; end if;
+  select count(*) into admin_count from public.admin_users;
+  if admin_count <= 1 then raise exception 'At least one admin must remain'; end if;
+  delete from public.admin_users where user_id = target_user_id;
+  return found;
+end;
+$$;
+revoke all on function public.list_woodri_admins() from public;
+revoke all on function public.revoke_woodri_admin(uuid) from public;
+grant execute on function public.list_woodri_admins() to authenticated;
+grant execute on function public.revoke_woodri_admin(uuid) to authenticated;
+
 commit;
 
 -- ADMIN BOOTSTRAP (run separately after creating the staff user in
