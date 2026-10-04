@@ -72,6 +72,18 @@ create table if not exists public.posts (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.hero_slides (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  subtitle text,
+  image text not null,
+  cta text,
+  link text,
+  is_published boolean not null default true,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists public.site_settings (
   key text primary key,
   value jsonb not null default '{}'::jsonb,
@@ -111,6 +123,7 @@ alter table public.testimonials enable row level security;
 alter table public.partners enable row level security;
 alter table public.posts enable row level security;
 alter table public.site_settings enable row level security;
+alter table public.hero_slides enable row level security;
 alter table public.vouchers enable row level security;
 alter table public.leads enable row level security;
 
@@ -161,6 +174,13 @@ create policy "admins manage posts" on public.posts
   using (public.is_woodri_admin())
   with check (public.is_woodri_admin());
 
+drop policy if exists "public reads published hero slides" on public.hero_slides;
+create policy "public reads published hero slides" on public.hero_slides
+  for select to anon, authenticated using (is_published or public.is_woodri_admin());
+drop policy if exists "admins manage hero slides" on public.hero_slides;
+create policy "admins manage hero slides" on public.hero_slides
+  for all to authenticated using (public.is_woodri_admin()) with check (public.is_woodri_admin());
+
 drop policy if exists "public reads site settings" on public.site_settings;
 create policy "public reads site settings" on public.site_settings
   for select to anon, authenticated using (true);
@@ -196,11 +216,11 @@ create policy "admins read and manage leads" on public.leads
 -- API privileges: public can read public content and submit lead forms;
 -- only authenticated Woodri admins can change content or read leads.
 grant select on public.products, public.testimonials, public.partners,
-  public.posts, public.site_settings, public.vouchers to anon, authenticated;
+  public.posts, public.site_settings, public.vouchers, public.hero_slides to anon, authenticated;
 grant insert on public.leads to anon, authenticated;
 grant all on public.admin_users, public.products, public.testimonials,
   public.partners, public.posts, public.site_settings, public.vouchers,
-  public.leads to authenticated;
+  public.leads, public.hero_slides to authenticated;
 
 -- Default promo/copy and a starter voucher make Gift Planner usable after setup.
 insert into public.site_settings(key, value) values
@@ -217,5 +237,11 @@ commit;
 -- ADMIN BOOTSTRAP (run separately after creating the staff user in
 -- Authentication → Users; replace the email before running):
 -- insert into public.admin_users(user_id)
--- select id from auth.users where email = 'admin@woodri.id'
+-- select id from auth.users where email = 'adminwoodri@gmail.com'
+-- on conflict (user_id) do nothing;
+
+-- First admin setup (run in SQL Editor after creating this user under
+-- Supabase Dashboard → Authentication → Users):
+-- insert into public.admin_users(user_id)
+-- select id from auth.users where email = 'adminwoodri@gmail.com'
 -- on conflict (user_id) do nothing;

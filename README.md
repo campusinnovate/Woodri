@@ -4,13 +4,13 @@ Situs Woodri multi halaman dengan HTML, CSS, dan JavaScript vanilla, dipublikasi
 
 ## Menyiapkan backend Supabase
 
-1. Buka **SQL Editor** pada proyek `uhxcvecdkrcgdvbztuxi` dan jalankan `supabase/schema.sql` satu kali.
-2. Di **Authentication → Providers**, aktifkan Email. Buat akun staf di **Authentication → Users**.
+1. Buka **SQL Editor** pada proyek `uhxcvecdkrcgdvbztuxi` dan jalankan `supabase/schema.sql` satu kali (atau jalankan lagi setelah pembaruan untuk menambahkan tabel slider).
+2. Di **Authentication → Providers**, aktifkan Email. Di **Authentication → Users → Add user → Create new user**, buat `adminwoodri@gmail.com` dengan kata sandi awal `Admin123` (centang konfirmasi email jika tersedia). Kredensial ini tidak disimpan di source code.
 3. Jadikan akun tersebut admin dengan SQL (ganti alamat email):
 
    ```sql
    insert into public.admin_users(user_id)
-   select id from auth.users where email = 'admin@woodri.id'
+   select id from auth.users where email = 'adminwoodri@gmail.com'
    on conflict do nothing;
    ```
 
@@ -27,7 +27,7 @@ Workflow `.github/workflows/pages.yml` membangun deployment dari branch `main` s
 
 ## Admin
 
-Buka `/admin.html`, lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel dapat melihat prospek, mengelola produk, testimoni, logo kolaborasi, artikel, banner, voucher, dan copy halaman. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
+Buka `/admin.html`, lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel dapat melihat dan menghapus prospek, mengelola produk, testimoni, logo kolaborasi, artikel, slider beranda, banner, voucher, dan copy halaman. Admin dapat mengganti kata sandi dari bagian **Keamanan akun** setelah login. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
 
 Pastikan teks persetujuan pemrosesan data pelanggan, kebijakan privasi, materi blog, spesifikasi produk, dan promo sudah ditinjau Woodri sebelum operasional publik.
 
