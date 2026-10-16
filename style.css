@@ -66,3 +66,4 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,227,207,.38),transpare
 .instagram-grid:has(.instagram-placeholder) .instagram-placeholder{min-height:180px;aspect-ratio:auto}
 .instagram-grid:has(.instagram-post-link){grid-template-columns:repeat(3,minmax(0,1fr))}.instagram-grid .instagram-post-link{aspect-ratio:1;min-height:180px}
 @media(max-width:700px){.instagram-grid:has(.instagram-post-link){grid-template-columns:repeat(2,minmax(0,1fr))}}
+.admin-product-image-edit{display:inline-flex;vertical-align:middle;align-items:center;gap:7px;margin-right:10px;padding:4px 8px 4px 4px;border:1px solid #dfe5dc;border-radius:9px;background:#f6f8f3;color:#415a46;cursor:pointer}.admin-product-image-edit img{width:42px;height:42px;object-fit:cover;border-radius:6px}.admin-product-image-edit small{font:600 10px 'DM Sans',sans-serif}.admin-product-image-edit:hover{border-color:#91a58e;background:#eef3eb}
