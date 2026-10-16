@@ -43,3 +43,16 @@ Pastikan teks persetujuan pemrosesan data pelanggan, kebijakan privasi, materi b
 ## Login Google SSO untuk admin
 
 Panel admin menyediakan tombol Google SSO lewat Supabase Auth, dengan login email/kata sandi sebagai cadangan. Untuk mengaktifkan SSO, aktifkan provider Google pada **Authentication → Sign In / Providers** di Supabase, masukkan OAuth Client ID/Secret dari Google Cloud, dan tambahkan URL callback Supabase yang ditampilkan pada pengaturan provider. Tambahkan juga URL admin Pages (`https://campusinnovate.github.io/Woodri/admin/`) pada **Authentication → URL Configuration → Redirect URLs**. Pengguna Google tetap perlu ditambahkan ke tabel `admin_users` agar panel terbuka.
+
+## Feed Instagram terbaru di beranda
+
+Panel admin tidak lagi mengelola foto Instagram secara manual. Beranda mengambil tiga posting terbaru langsung dari Instagram Graph API lewat Edge Function `instagram-feed`; foto katalog lokal tidak dipakai sebagai pengganti feed.
+
+Agar feed langsung aktif, akun `@woodri.id` perlu berupa akun profesional (Business atau Creator) dan dihubungkan ke aplikasi Meta dengan izin baca konten Instagram (`instagram_business_basic`). Buat access token akun melalui alur Instagram Login di aplikasi Meta, lalu simpan sebagai secret Supabase—jangan taruh token di file frontend atau repository:
+
+```sh
+supabase secrets set INSTAGRAM_ACCESS_TOKEN='TOKEN_AKUN_WOODRI' --project-ref uhxcvecdkrcgdvbztuxi
+supabase functions deploy instagram-feed --project-ref uhxcvecdkrcgdvbztuxi
+```
+
+Fungsi mengembalikan paling banyak tiga posting terbaru dan di-cache selama lima menit. Tanpa token atau bila Instagram menolak permintaan, beranda hanya menampilkan tautan ke profil `@woodri.id`; tidak ada foto contoh yang ditampilkan sebagai posting Instagram.
