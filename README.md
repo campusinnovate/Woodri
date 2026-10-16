@@ -36,7 +36,7 @@ Workflow `.github/workflows/pages.yml` membangun deployment dari branch `main` s
 
 ## Admin
 
-Buka `/Woodri/admin/` (atau `/admin/` pada domain utama), lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel admin dipisah ke halaman fitur seperti `/Woodri/admin/kontak/`, `/Woodri/admin/katalog/`, `/Woodri/admin/banner/`, dan `/Woodri/admin/tim/`. Panel dapat mengelola deskripsi produk, foto, banner lebar beranda, slider hero, voucher, prospek, dan konten lainnya. Admin dapat mengganti kata sandi dari bagian **Keamanan akun** setelah login. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
+Buka `/Woodri/admin/` (atau `/admin/` pada domain utama), lalu masuk menggunakan akun yang dibuat di Supabase dan yang `user_id`-nya terdaftar pada `admin_users`. Panel admin dipisah ke halaman fitur seperti `/Woodri/admin/kontak/`, `/Woodri/admin/katalog/`, `/Woodri/admin/banner/`, dan `/Woodri/admin/tim/`. Panel dapat mengelola deskripsi produk, foto, banner lebar beranda, slider hero, voucher, prospek, dan konten lainnya. Editor layout visual tersedia di Ringkasan admin: urutkan section homepage dengan drag-and-drop, edit judul/teks/gambar/tautan, tambahkan section custom, pratinjau perubahan, lalu terbitkan. Konfigurasinya disimpan pada `site_settings` (key `home_layout`) sehingga tidak memerlukan migrasi skema baru. Admin dapat mengganti kata sandi dari bagian **Keamanan akun** setelah login. Produk tidak menampilkan harga; detail bahan dan spesifikasi dapat dimasukkan pada form katalog.
 
 Pastikan teks persetujuan pemrosesan data pelanggan, kebijakan privasi, materi blog, spesifikasi produk, dan promo sudah ditinjau Woodri sebelum operasional publik.
 
