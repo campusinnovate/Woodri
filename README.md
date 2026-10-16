@@ -46,7 +46,7 @@ Panel admin menyediakan tombol Google SSO lewat Supabase Auth, dengan login emai
 
 ## Feed Instagram terbaru di beranda
 
-Panel admin tidak lagi mengelola foto Instagram secara manual. Beranda mengambil tiga posting terbaru langsung dari Instagram Graph API lewat Edge Function `instagram-feed`; foto katalog lokal tidak dipakai sebagai pengganti feed.
+Panel admin menyediakan bagian **Link Instagram** untuk menambahkan hingga tiga tautan posting terbaru @woodri.id. Link yang disimpan tampil di beranda sebagai kartu langsung ke posting Instagram. Jika belum ada link yang dimasukkan, beranda mengambil tiga posting terbaru dari Instagram Graph API lewat Edge Function `instagram-feed`; foto katalog lokal tidak dipakai sebagai pengganti feed.
 
 Agar feed langsung aktif, akun `@woodri.id` perlu berupa akun profesional (Business atau Creator) dan dihubungkan ke aplikasi Meta dengan izin baca konten Instagram (`instagram_business_basic`). Buat access token akun melalui alur Instagram Login di aplikasi Meta, lalu simpan sebagai secret Supabase—jangan taruh token di file frontend atau repository:
 

@@ -64,3 +64,5 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,227,207,.38),transpare
 .instagram-feed-status{grid-column:1/-1;min-height:180px;display:grid;place-items:center;padding:24px;color:#788078;font-size:13px;text-align:center;border:1px solid #dcded5;background:#eeeee7}
 .instagram-grid:has(.instagram-placeholder){grid-template-columns:1fr}
 .instagram-grid:has(.instagram-placeholder) .instagram-placeholder{min-height:180px;aspect-ratio:auto}
+.instagram-grid:has(.instagram-post-link){grid-template-columns:repeat(3,minmax(0,1fr))}.instagram-grid .instagram-post-link{aspect-ratio:1;min-height:180px}
+@media(max-width:700px){.instagram-grid:has(.instagram-post-link){grid-template-columns:repeat(2,minmax(0,1fr))}}
